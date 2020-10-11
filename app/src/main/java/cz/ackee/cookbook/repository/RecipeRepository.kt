@@ -34,12 +34,14 @@ class RecipeRepository @Inject constructor(
                                 recipeRest.description = recipe.description
                                 recipeRest.info = recipe.info
                                 recipeRest.ingredients = recipe.ingredients
+                                recipeRest.offset = offset
                                 recipeDao.updateItem(recipeRest)
                                 existsInDb = true
                                 break
                             }
                         }
                         if (!existsInDb) {
+                            recipeRest.offset = offset
                             recipeDao.insertItem(recipeRest)
                         }
                     }
@@ -53,7 +55,7 @@ class RecipeRepository @Inject constructor(
                 return shouldFetch
             }
 
-            override fun loadFromDb() = recipeDao.loadAllRecipes()
+            override fun loadFromDb() = recipeDao.loadAllRecipes(offset)
 
             override fun createCall() = apiService.getRecipes(limit, offset)
         }.asLiveData()
@@ -61,13 +63,16 @@ class RecipeRepository @Inject constructor(
 
     fun getOneRecipe(shouldFetch: Boolean, id: String): LiveData<Resource<Recipe?>> {
         return object : NetworkBoundResource<Recipe?, Recipe?>(appExecutors) {
+            var itemDb: Recipe? = null
 
             override fun saveCallResult(item: Recipe?) {
                 if (item == null) return
+                item.offset = itemDb?.offset ?: 0
                 recipeDao.updateItem(item)
             }
 
             override fun shouldFetch(data: Recipe?): Boolean {
+                itemDb = data
                 return shouldFetch
             }
 

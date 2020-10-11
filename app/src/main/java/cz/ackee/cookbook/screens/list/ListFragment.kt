@@ -11,6 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import cz.ackee.cookbook.AppConfig
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.binding.FragmentDataBindingComponent
 import cz.ackee.cookbook.databinding.FragmentListBinding
@@ -18,6 +20,7 @@ import cz.ackee.cookbook.di.Injectable
 import cz.ackee.cookbook.screens.common.ClickCallback
 import cz.ackee.cookbook.util.AppExecutors
 import cz.ackee.cookbook.vo.api.Status
+import cz.ackee.cookbook.vo.db.Recipe
 import javax.inject.Inject
 
 class ListFragment : Fragment(), Injectable, ClickCallback {
@@ -68,15 +71,33 @@ class ListFragment : Fragment(), Injectable, ClickCallback {
             )
         }
 
-        listModel.allRecipesLiveData.observe(viewLifecycleOwner, Observer { recipes ->
-            binding.resource = recipes
-            if (recipes.status != Status.LOADING) {
-                (binding.rwRecipes.adapter as RecipesAdapter).submitList(recipes.data)
+        // handler for fetching next portion of recipes
+        binding.rwRecipes.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    listModel.fetchData()
+                }
             }
 
         })
 
-        listModel.fetchData()
+        listModel.allRecipesLiveData.observe(viewLifecycleOwner, Observer { recipes ->
+            binding.resource = recipes
+            if (recipes.status != Status.LOADING) {
+                listModel.listRecipes.addAll(recipes.data as List<Recipe>)
+                (binding.rwRecipes.adapter as RecipesAdapter).submitList(listModel.listRecipes)
+                (binding.rwRecipes.adapter as RecipesAdapter).notifyDataSetChanged()
+                // if new recipes fetched scroll up a little
+                if (!(listModel.listRecipes.size <= AppConfig.LIMIT_FOR_RECIPES_FETCH || recipes.data.isEmpty())) {
+                    binding.rwRecipes.smoothScrollBy(0, 100)
+                }
+            }
+        })
+
+        if (!listModel.wasPaused) {
+            listModel.fetchData()
+        }
     }
 
     override fun onClick(view: View) {
@@ -85,5 +106,10 @@ class ListFragment : Fragment(), Injectable, ClickCallback {
             val action = ListFragmentDirections.actionListFragmentToDetailFragment(recipeId)
             findNavController().navigate(action)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        listModel.wasPaused = true
     }
 }

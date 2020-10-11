@@ -11,6 +11,7 @@ data class Recipe(
         var score: Double,
         var description: String?,
         var ingredients: ArrayList<String>?,
-        var info: String?
+        var info: String?,
+        var offset: Int
 
 )
