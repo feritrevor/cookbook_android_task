@@ -1,4 +1,31 @@
 <resources>
     <string name="app_name">Cookbook</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_add">Pridať</string>
+    <string name="list_title">Recepty</string>
+
+    <string name="add_title">Pridať recept</string>
+    <string name="add_name_hint">Názov receptu</string>
+    <string name="add_intro_hint">Úvodný text</string>
+    <string name="add_ingredients_title">Ingredience</string>
+    <string name="add_one_ingredient_hint">Vaše ingredience</string>
+    <string name="add_process_hint">Postup</string>
+    <string name="add_time_hint">Čas</string>
+
+    <string name="detail_ingredients">Ingredience</string>
+    <string name="detail_process_title">Příprava jídla</string>
+    <string name="detail_rate_title">Ohodnoť tento recept</string>
+
+    <string name="duration">%s min.</string>
+
+    <string name="rating_success_title">Podarilo sa</string>
+    <string name="rating_success_description">Počet pridaných hviezdičiek: %s</string>
+    <string name="rating_error_title">Nepodarilo sa</string>
+    <string name="rating_error_description">Nastala neznáma chyba</string>
+
+    <string name="create_new_recipe_success_description">Úspešne ste vytvorili nový recept</string>
+    <string name="create_new_recipe_input_error">Toto pole nesmie byť prázdne</string>
+    <string name="create_new_recipe_error_no_ackee">Názov receptu musí obsahovať slovo "Ackee".</string>
+    <string name="create_new_recipe_error_name_already_exists">Recept s týmto menom už existuje</string>
+
+    <string name="ok">OK</string>
 </resources>

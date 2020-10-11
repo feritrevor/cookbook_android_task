@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="itemRecipe"
+            type="cz.ackee.cookbook.vo.db.Recipe" />
+
+        <variable
+            name="clickCallback"
+            type="cz.ackee.cookbook.screens.common.ClickCallback" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/clickable_background"
+        android:onClick="@{view -> clickCallback.onClick(view)}"
+        android:tag="@{itemRecipe.id}">
+
+        <ImageView
+            android:id="@+id/recipeImage"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"
+            android:layout_marginStart="@dimen/screen_margin"
+            android:layout_marginTop="@dimen/screen_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:recipeImage="@{null}" />
+
+        <TextView
+            android:id="@+id/clientName"
+            style="@style/TextTitleMedium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/screen_margin"
+            android:layout_marginEnd="@dimen/screen_margin"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{itemRecipe.name}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/recipeImage"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Cokoladova nutela" />
+
+        <LinearLayout
+            android:id="@+id/rating_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/clientName"
+            app:layout_constraintTop_toBottomOf="@id/clientName">
+
+            <ImageView
+                android:layout_width="@dimen/star_size_small"
+                android:layout_height="@dimen/star_size_small"
+                android:src="@drawable/ic_star"
+                app:visibleGone="@{itemRecipe.score > 0.5}" />
+
+            <ImageView
+                android:layout_width="@dimen/star_size_small"
+                android:layout_height="@dimen/star_size_small"
+                android:src="@drawable/ic_star"
+                app:visibleGone="@{itemRecipe.score > 1.5}" />
+
+            <ImageView
+                android:layout_width="@dimen/star_size_small"
+                android:layout_height="@dimen/star_size_small"
+                android:src="@drawable/ic_star"
+                app:visibleGone="@{itemRecipe.score > 2.5}" />
+
+            <ImageView
+                android:layout_width="@dimen/star_size_small"
+                android:layout_height="@dimen/star_size_small"
+                android:src="@drawable/ic_star"
+                app:visibleGone="@{itemRecipe.score > 3.5}" />
+
+            <ImageView
+                android:layout_width="@dimen/star_size_small"
+                android:layout_height="@dimen/star_size_small"
+                android:src="@drawable/ic_star"
+                app:visibleGone="@{itemRecipe.score > 4.5}" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/image_clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_time"
+            app:layout_constraintBottom_toBottomOf="@id/txt_duration"
+            app:layout_constraintStart_toStartOf="@id/clientName"
+            app:layout_constraintTop_toTopOf="@id/txt_duration" />
+
+        <TextView
+            android:id="@+id/txt_duration"
+            style="@style/TextDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="@{String.format(@string/duration, itemRecipe.duration)}"
+            android:textColor="@color/colorBlack"
+            app:layout_constraintStart_toEndOf="@id/image_clock"
+            app:layout_constraintTop_toBottomOf="@id/rating_wrapper"
+            tools:text="120 min" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/screen_margin"
+            android:background="@color/listDividerGray"
+            app:layout_constraintTop_toBottomOf="@id/recipeImage" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

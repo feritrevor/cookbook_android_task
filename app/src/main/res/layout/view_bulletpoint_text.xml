@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="ingredient"
+            type="String" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/bulletPointSize"
+            android:layout_height="@dimen/bulletPointSize"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/margin_small"
+            android:src="@drawable/bullet_point_background" />
+
+        <TextView
+            android:id="@+id/txt_ingredience"
+            style="@style/TextDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/margin_x_small"
+            android:text="@{ingredient}"
+            tools:text="Test test hjashd dsajdKS DSAKJDKA DAKSJDKA DSAKjdk DSAJKD SADJSKJD SDHDFDS FSDKJFS FDS\nsjasjsajsjasa" />
+
+    </LinearLayout>
+
+</layout>

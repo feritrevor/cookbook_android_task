@@ -1,10 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ackee.cz.cookbook.screens.MainActivity">
+    tools:context="ackee.cz.cookbook.screens.DetailFragment">
     <item
         android:id="@+id/action_add"
-        android:icon="@drawable/ic_add_blue"
+        android:icon="@drawable/ic_add_white"
         android:title="@string/action_add"
         app:showAsAction="always" />
 </menu>

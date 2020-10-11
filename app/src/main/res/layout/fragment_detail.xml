@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".screens.FragmentDetail">
+
+    <data>
+
+        <variable
+            name="recipe"
+            type="cz.ackee.cookbook.vo.db.Recipe" />
+
+        <variable
+            name="clickCallback"
+            type="cz.ackee.cookbook.screens.detail.DetailFragmentCallback" />
+
+        <variable
+            name="viewModel"
+            type="cz.ackee.cookbook.screens.detail.DetailViewModel" />
+
+        <variable
+            name="resource"
+            type="cz.ackee.cookbook.vo.api.Resource" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/app_bar_height"
+            android:fitsSystemWindows="true"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/toolbar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                app:contentScrim="@color/colorBlue"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:maxLines="3"
+                app:statusBarScrim="@color/colorBlue">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/app_bar_height"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.7">
+
+                    <ImageView
+                        android:id="@+id/expandedImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/app_bar_height"
+                        android:scaleType="centerCrop"
+                        app:toolbarImage="@{null}" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/app_bar_height"
+                        android:background="@color/blackOpacity40" />
+
+                </FrameLayout>
+
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"
+                    app:title="@{recipe.name}" />
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/header_wrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorAccent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/screen_margin"
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:paddingEnd="@dimen/screen_margin"
+                    android:paddingBottom="@dimen/activity_vertical_margin"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="@dimen/star_size_medium"
+                        android:layout_height="@dimen/star_size_medium"
+                        android:src="@drawable/ic_star_white"
+                        app:visibleInvisible="@{recipe.score > 0.5}" />
+
+                    <ImageView
+                        android:layout_width="@dimen/star_size_medium"
+                        android:layout_height="@dimen/star_size_medium"
+                        android:src="@drawable/ic_star_white"
+                        app:visibleInvisible="@{recipe.score > 1.5}" />
+
+                    <ImageView
+                        android:layout_width="@dimen/star_size_medium"
+                        android:layout_height="@dimen/star_size_medium"
+                        android:src="@drawable/ic_star_white"
+                        app:visibleInvisible="@{recipe.score > 2.5}" />
+
+                    <ImageView
+                        android:layout_width="@dimen/star_size_medium"
+                        android:layout_height="@dimen/star_size_medium"
+                        android:src="@drawable/ic_star_white"
+                        app:visibleInvisible="@{recipe.score > 3.5}" />
+
+                    <ImageView
+                        android:layout_width="@dimen/star_size_medium"
+                        android:layout_height="@dimen/star_size_medium"
+                        android:src="@drawable/ic_star_white"
+                        app:visibleInvisible="@{recipe.score > 4.5}" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_time"
+                        android:tint="@color/colorWhite" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:text="@{String.format(@string/duration, recipe.duration)}"
+                        android:textColor="@color/colorWhite"
+                        tools:text="120 min." />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txt_intro"
+                    style="@style/TextDefault"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/screen_margin"
+                    android:layout_marginTop="@dimen/screen_margin"
+                    android:layout_marginEnd="@dimen/screen_margin"
+                    android:text="@{recipe.info}"
+                    app:layout_constraintTop_toBottomOf="@id/header_wrapper"
+                    tools:text="Když si čokoládovou pomazánku (nebo cokoli jiného) uděláte doma, víte, co jste do ní dali, a dopřejete si samé dobré věci. Je pak už jen na vás, jestli budete pomazánku snídat, či mlsat jen tak ze sklenice." />
+
+                <TextView
+                    android:id="@+id/txt_ingredience_title"
+                    style="@style/TextTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/screen_margin"
+                    android:layout_marginTop="@dimen/screen_margin"
+                    android:layout_marginEnd="@dimen/screen_margin"
+                    android:text="@string/detail_ingredients"
+                    app:layout_constraintTop_toBottomOf="@id/txt_intro"
+                    app:visibleGone="@{recipe.ingredients.size() > 0}" />
+
+                <LinearLayout
+                    android:id="@+id/ingredients_wrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/screen_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginEnd="@dimen/screen_margin"
+                    android:orientation="vertical"
+                    app:ingredients="@{recipe.ingredients}"
+                    app:layout_constraintTop_toBottomOf="@id/txt_ingredience_title"
+                    app:visibleGone="@{recipe.ingredients.size() > 0}" />
+
+                <TextView
+                    android:id="@+id/txt_process_title"
+                    style="@style/TextTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/screen_margin"
+                    android:layout_marginTop="@dimen/screen_margin"
+                    android:layout_marginEnd="@dimen/screen_margin"
+                    android:text="@string/detail_process_title"
+                    app:layout_constraintTop_toBottomOf="@id/ingredients_wrapper" />
+
+                <TextView
+                    android:id="@+id/txt_process"
+                    style="@style/TextDefault"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/screen_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginEnd="@dimen/screen_margin"
+                    android:text="@{recipe.description}"
+                    app:layout_constraintTop_toBottomOf="@id/txt_process_title"
+                    tools:text="Čokoládu nasekejte nadrobno a dejte ji do mísy odolné vůči teplu. V rendlíku zahřejte mléko a nastrouhanou pomerančovou kůru těsně pod bod varu. Přeceďte na čokoládu a rozmíchejte. Vmíchejte pomerančovou šťávu a vlijte do sterilizovaných sklenic. Uchovávejte v chladničce a mažte na bílé pečivo nebo jezte jen tak samotné." />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/screen_margin"
+                    android:background="@color/colorBlue"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/screen_margin"
+                    app:layout_constraintTop_toBottomOf="@id/txt_process">
+
+                    <TextView
+                        style="@style/TextTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/detail_rate_title"
+                        android:textColor="@color/colorWhite" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/star_size_large"
+                            android:layout_height="@dimen/star_size_large"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:onClick="@{() -> clickCallback.onStarClick(1)}"
+                            android:src="@drawable/ic_star_white"
+                            android:tint="@{viewModel.starClicked > 0 ? @color/colorWhite : @color/colorBlueDisabled}" />
+
+                        <ImageView
+                            android:layout_width="@dimen/star_size_large"
+                            android:layout_height="@dimen/star_size_large"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:onClick="@{() -> clickCallback.onStarClick(2)}"
+                            android:src="@drawable/ic_star_white"
+                            android:tint="@{viewModel.starClicked > 1 ? @color/colorWhite : @color/colorBlueDisabled}" />
+
+                        <ImageView
+                            android:layout_width="@dimen/star_size_large"
+                            android:layout_height="@dimen/star_size_large"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:onClick="@{() -> clickCallback.onStarClick(3)}"
+                            android:src="@drawable/ic_star_white"
+                            android:tint="@{viewModel.starClicked > 2 ? @color/colorWhite : @color/colorBlueDisabled}" />
+
+                        <ImageView
+                            android:layout_width="@dimen/star_size_large"
+                            android:layout_height="@dimen/star_size_large"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:onClick="@{() -> clickCallback.onStarClick(4)}"
+                            android:src="@drawable/ic_star_white"
+                            android:tint="@{viewModel.starClicked > 3 ? @color/colorWhite : @color/colorBlueDisabled}" />
+
+                        <ImageView
+                            android:layout_width="@dimen/star_size_large"
+                            android:layout_height="@dimen/star_size_large"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:onClick="@{() -> clickCallback.onStarClick(5)}"
+                            android:src="@drawable/ic_star_white"
+                            android:tint="@{viewModel.starClicked > 4 ? @color/colorWhite : @color/colorBlueDisabled}" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <include
+                    layout="@layout/view_loading_state"
+                    android:layout_width="@dimen/loading_state_size"
+                    android:layout_height="@dimen/loading_state_size"
+                    android:layout_gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:resource="@{resource}" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>
