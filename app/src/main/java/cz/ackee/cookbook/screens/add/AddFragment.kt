@@ -37,19 +37,21 @@ class AddFragment : Fragment(), Injectable, AddFragmentCallback {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.clickCallback = this
 
-        binding.toolbarList.inflateMenu(R.menu.menu_main)
-        binding.toolbarList.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_add -> {
-                    UiUtil.hideKeyboard(activity)
-                    validateInputs()
+        binding.toolbarList.apply {
+            inflateMenu(R.menu.menu_main)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.action_add -> {
+                        UiUtil.hideKeyboard(activity)
+                        validateInputs()
+                    }
                 }
+                true
             }
-            true
-        }
-        binding.toolbarList.setNavigationIcon(R.drawable.ic_back_blue)
-        binding.toolbarList.setNavigationOnClickListener {
-            findNavController().navigateUp()
+            setNavigationIcon(R.drawable.ic_back_blue)
+            setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
         }
 
         for (i in 1..2) {

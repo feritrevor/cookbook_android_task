@@ -43,18 +43,20 @@ class DetailFragment : Fragment(), Injectable, DetailFragmentCallback {
         binding.clickCallback = this
 
 
-        binding.toolbar.inflateMenu(R.menu.menu_detail)
-        binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_add -> {
-                    findNavController().navigate(R.id.action_global_addFragment)
+        binding.toolbar.apply {
+            inflateMenu(R.menu.menu_detail)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.action_add -> {
+                        findNavController().navigate(R.id.action_global_addFragment)
+                    }
                 }
+                true
             }
-            true
-        }
-        binding.toolbar.setNavigationIcon(R.drawable.ic_back_white)
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
+            setNavigationIcon(R.drawable.ic_back_white)
+            setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
         }
 
         return binding.root

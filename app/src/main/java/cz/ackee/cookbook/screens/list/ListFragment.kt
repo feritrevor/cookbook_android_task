@@ -44,14 +44,16 @@ class ListFragment : Fragment(), Injectable, ClickCallback {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.listToolbar.inflateMenu(R.menu.menu_main)
-        binding.listToolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_add -> {
-                    findNavController().navigate(R.id.action_global_addFragment)
+        binding.listToolbar.apply {
+            inflateMenu(R.menu.menu_main)
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.action_add -> {
+                        findNavController().navigate(R.id.action_global_addFragment)
+                    }
                 }
+                true
             }
-            true
         }
 
         return binding.root
@@ -69,33 +71,37 @@ class ListFragment : Fragment(), Injectable, ClickCallback {
                     dataBindingComponent,
                     this@ListFragment
             )
-        }
-
-        // handler for fetching next portion of recipes
-        binding.rwRecipes.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1)) {
-                    listModel.fetchData()
+            // handler for fetching next portion of recipes
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        listModel.fetchingDataEnabled = true
+                        listModel.fetchData()
+                    }
                 }
-            }
 
-        })
+            })
+        }
 
         listModel.allRecipesLiveData.observe(viewLifecycleOwner, Observer { recipes ->
             binding.resource = recipes
             if (recipes.status != Status.LOADING) {
-                listModel.listRecipes.addAll(recipes.data as List<Recipe>)
-                (binding.rwRecipes.adapter as RecipesAdapter).submitList(listModel.listRecipes)
-                (binding.rwRecipes.adapter as RecipesAdapter).notifyDataSetChanged()
+                if (listModel.fetchingDataEnabled) {
+                    listModel.listRecipes.addAll(recipes.data as List<Recipe>)
+                }
+                (binding.rwRecipes.adapter as RecipesAdapter).apply {
+                    submitList(listModel.listRecipes)
+                    notifyDataSetChanged()
+                }
                 // if new recipes fetched scroll up a little
-                if (!(listModel.listRecipes.size <= AppConfig.LIMIT_FOR_RECIPES_FETCH || recipes.data.isEmpty())) {
-                    binding.rwRecipes.smoothScrollBy(0, 100)
+                if (!(listModel.listRecipes.size <= AppConfig.LIMIT_FOR_RECIPES_FETCH || (recipes.data as List<Recipe>).isEmpty())) {
+                    binding.rwRecipes.smoothScrollBy(0, 200)
                 }
             }
         })
 
-        if (!listModel.wasPaused) {
+        if (listModel.fetchingDataEnabled) {
             listModel.fetchData()
         }
     }
@@ -110,6 +116,6 @@ class ListFragment : Fragment(), Injectable, ClickCallback {
 
     override fun onPause() {
         super.onPause()
-        listModel.wasPaused = true
+        listModel.fetchingDataEnabled = false
     }
 }

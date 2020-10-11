@@ -20,7 +20,7 @@
     <string name="rating_success_title">Podarilo sa</string>
     <string name="rating_success_description">Počet pridaných hviezdičiek: %s</string>
     <string name="rating_error_title">Nepodarilo sa</string>
-    <string name="rating_error_description">Nastala neznáma chyba</string>
+    <string name="rating_error_description">Chyba internetového pripojenia alebo chyba serveru.</string>
 
     <string name="create_new_recipe_success_description">Úspešne ste vytvorili nový recept</string>
     <string name="create_new_recipe_input_error">Toto pole nesmie byť prázdne</string>

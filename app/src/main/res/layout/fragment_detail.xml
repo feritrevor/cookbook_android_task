@@ -196,6 +196,7 @@
                     android:layout_marginTop="@dimen/screen_margin"
                     android:layout_marginEnd="@dimen/screen_margin"
                     android:text="@string/detail_process_title"
+                    app:visibleGone="@{recipe.description.length() > 0}"
                     app:layout_constraintTop_toBottomOf="@id/ingredients_wrapper" />
 
                 <TextView
@@ -208,6 +209,7 @@
                     android:layout_marginEnd="@dimen/screen_margin"
                     android:text="@{recipe.description}"
                     app:layout_constraintTop_toBottomOf="@id/txt_process_title"
+                    app:visibleGone="@{recipe.description.length() > 0}"
                     tools:text="Čokoládu nasekejte nadrobno a dejte ji do mísy odolné vůči teplu. V rendlíku zahřejte mléko a nastrouhanou pomerančovou kůru těsně pod bod varu. Přeceďte na čokoládu a rozmíchejte. Vmíchejte pomerančovou šťávu a vlijte do sterilizovaných sklenic. Uchovávejte v chladničce a mažte na bílé pečivo nebo jezte jen tak samotné." />
 
                 <LinearLayout

@@ -18,7 +18,7 @@ class ListViewModel @Inject constructor(
 
     val listRecipes: ArrayList<Recipe> = ArrayList()
     var fetchedRecipesCount = 0
-    var wasPaused = false
+    var fetchingDataEnabled = true
 
 
     var allRecipesLiveData: LiveData<Resource<List<Recipe>?>> = Transformations.switchMap(fetchData) {
